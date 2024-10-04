@@ -66,6 +66,10 @@ def seed_audiobooks():
                 "title": "Water for Elephants",
                 "author": "Sara Gruen",
                 "cover_image": "https://images-na.ssl-images-amazon.com/images/S/compressed.photo.goodreads.com/books/1722456144i/43641.jpg"
+            },{
+                "title": "The Hitchhiker’s Guide to the Galaxy",
+                "author": "Douglas Adams",
+                "cover_image": "https://s10785.pcdn.co/wp-content/uploads/2023/05/Best-audiobooks-of-all-time-The-Hitchhikers-Guide-to-the-Galaxy.jpg"
             }
         ]
         
@@ -170,18 +174,18 @@ class VoteResource(Resource):
         user_id = data['user_id']
         audiobook_id = data['audiobook_id']
         if not User.query.get(user_id):
-            return {"message": "User not found"}, 404
+            return {"success": "false", "message": "User not found"}, 404
         if not AudioBook.query.get(audiobook_id):
-            return {"message": "Audiobook not found"}, 404
+            return {"success": "false","message": "Audiobook not found"}, 404
         
         vote = Vote.query.filter_by(user_id=user_id, audiobook_id=audiobook_id).first()
         if vote:
-            return {"message": "User has already voted for this audiobook"}, 400
+            return {"success": "false", "message": "User has already voted for this audiobook"}, 400
 
         new_vote = Vote(user_id=user_id, audiobook_id=audiobook_id)
         db.session.add(new_vote)
         db.session.commit()
-        return {"message": "Vote cast successfully"}, 201
+        return {"success": "false", "message": "Vote cast successfully"}, 201
 
 api.add_resource(UserResource, '/users')
 api.add_resource(AudioBookResource, '/audiobooks')
